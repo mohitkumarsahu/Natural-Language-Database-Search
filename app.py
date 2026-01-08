@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
-from llm_to_sql import nl_to_sql
-from db_execute import execute_sql
+from backend_files.llm_to_sql import nl_to_sql
+from backend_files.db_execute import execute_sql
 
 app = Flask(__name__)
 
