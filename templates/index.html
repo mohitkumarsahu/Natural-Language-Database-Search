@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Database Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+            overflow-x: auto;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 4px solid red;
+            margin-top: 15px;
+        }
+        .no-results {
+            padding: 15px;
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        .results-count {
+            margin-top: 10px;
+            color: #666;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h2>🔍 Natural Language Database Search</h2>
+
+    <form method="POST">
+        <input type="text" name="query" size="70"
+            placeholder="e.g., show employees in HR department" required>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if sql %}
+    <h4>Generated SQL query</h4>
+    <pre>{{ sql }}</pre>
+    {% endif %}
+
+    {% if results is not none %}
+    <h4>Results</h4>
+    {% if results|length > 0 %}
+    <table border="1">
+        <tr>
+            {% for k in results[0].keys() %}
+            <th>{{ k|upper }}</th>
+            {% endfor %}
+        </tr>
+        {% for row in results %}
+        <tr>
+            {% for v in row.values() %}
+            <td>{{ v }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    <p class="results-count">{{ results|length }} row(s) returned</p>
+    {% else %}
+    <div class="no-results">
+        Query executed successfully but returned no results.
+    </div>
+    {% endif %}
+    {% endif %}
+
+    {% if error %}
+    <div class="error">
+        <strong>Error:</strong> {{ error }}
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>
